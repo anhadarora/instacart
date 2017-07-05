@@ -31,7 +31,6 @@ def number_to_row(argument):
     }
     return switcher.get(argument, [test[i][1],0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
 
-# scraping only first 50000 value instead of number_of_entries
 for i in range (50000):
     app = number_to_row(test[i][0])
     print app
@@ -39,32 +38,62 @@ for i in range (50000):
 
 print MATx
 
-def add_weights(lista,listb):
-    SUM = np.array([a+b for a,b in zip(lista,listb)])
-    SUM[0] = listb[0]
-    return (SUM)
+temp=0
+# SUM = np.zeros((columns,))
+temp_array=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+j=0
+k=0
+# RESx = np.empty(shape=[0, columns])
+result_array=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+## x is the np.array which is input
+temp=x[0][0]
 
-new_number_of_entries = (MATx.shape[0]) - 1
-RESx = np.empty(shape=[0, columns])
-SUM = np.zeros((columns,))
+new_number_of_entries = MATx.shape[0]
 
-for j in range (new_number_of_entries):
+for j in range(new_number_of_entries):
+    if (MATx[j][0]==temp):
+        temp_array = np.add(temp_array,MATx[j])
+            temp = MATx[j][0]
+    else:
+        np.put(temp_array,0,temp)
+        #result_array=np.append(result_array,temp_array)
+        result_array=np.insert(result_array,k,temp_array)
+        k=k+21
+        temp_array=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+    temp_array=np.add(temp_array,MATx[j])
+        temp=MATx[j][0]
+np.put(temp_array,0,temp)
+#result_array=np.append(result_array,temp_array)
+result_array=np.insert(result_array,k,temp_array)
+print result_array
 
-    order_current = MATx[j][:]
-    order_id = order_current[0]
+# def add_weights(lista,listb):
+#     SUM = np.array([a+b for a,b in zip(lista,listb)])
+#     SUM[0] = listb[0]
+#
+#     return (SUM)
 
-    order_next = MATx[j+1][:]
-    order_id_next = order_next[0]
-
-    if order_id_next:
-        if (order_id == order_id_next):
-            SUM = add_weights(SUM,order_next)
-            j = j + 1
-        else:
-            print SUM
-            RESx = np.append(RESx, [SUM], axis=0)
-
-RESx = np.append(RESx, [SUM], axis=0)
-line = RESx.astype(int)
-print line
-np.savetxt("/Users/anhad/Desktop/order_vs_department.csv", line, delimiter=",")
+#
+# RESx = np.empty(shape=[0, columns])
+# SUM = np.zeros((columns,))
+# new_number_of_entries = (MATx.shape[0]) - 1
+# for j in range (new_number_of_entries):
+#
+#     order_current = MATx[j][:]
+#     order_id = order_current[0]
+#
+#     order_next = MATx[j+1][:]
+#     order_id_next = order_next[0]
+#
+#     if order_id_next:
+#         if (order_id == order_id_next):
+#             SUM = add_weights(SUM,order_next)
+#             j = j + 1
+#         else:
+#             print SUM
+#             RESx = np.append(RESx, [SUM], axis=0)
+#
+# RESx = np.append(RESx, [SUM], axis=0)
+# line = RESx.astype(int)
+# print line
+# np.savetxt("/Users/anhad/Desktop/order_vs_department.csv", line, delimiter=",")
