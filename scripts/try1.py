@@ -4,7 +4,7 @@ from numpy import genfromtxt
 test = genfromtxt('/Users/anhad/Desktop/new.csv', delimiter=',')
 number_of_entries = test.shape[0] - 1
 columns = 21
-MATx = np.empty(shape=[0, columns])
+MATx = np.empty(shape=[0, columns], dtype = 'int64')
 
 def number_to_row(argument):
     switcher = {
@@ -31,7 +31,7 @@ def number_to_row(argument):
     }
     return switcher.get(argument, [test[i][1],0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
 
-for i in range (50000):
+for i in range (500):
     app = number_to_row(test[i][0])
     print app
     MATx = np.append(MATx, [app], axis=0)
@@ -39,39 +39,39 @@ for i in range (50000):
 print MATx
 
 temp=0
-# SUM = np.zeros((columns,))
-temp_array=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+temp_array = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
 j=0
 k=0
-# RESx = np.empty(shape=[0, columns])
-result_array=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-## x is the np.array which is input
-temp=x[0][0]
+RESx = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
 
-new_number_of_entries = MATx.shape[0]
+# MATx is the input now
+array_rows = MATx.shape[0]
+RESx_rows = 1
+array_cols = MATx.shape[1]
+RESx_cols = array_cols
+temp = MATx[0][0]
 
-for j in range(new_number_of_entries):
-    if (MATx[j][0]==temp):
-        temp_array = np.add(temp_array,MATx[j])
-            temp = MATx[j][0]
-    else:
+for j in range(array_rows):
+   if (MATx[j][0]==temp):
+	temp_array = np.add(temp_array,MATx[j])
+        temp = MATx[j][0]
+   else:
         np.put(temp_array,0,temp)
-        #result_array=np.append(result_array,temp_array)
-        result_array=np.insert(result_array,k,temp_array)
-        k=k+21
-        temp_array=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-    temp_array=np.add(temp_array,MATx[j])
-        temp=MATx[j][0]
+        print temp_array
+        RESx = np.insert(RESx,k,temp_array)
+        k = k + 21
+        RESx_rows = RESx_rows + 1
+        temp_array = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+	temp_array = np.add(temp_array,MATx[j])
+        temp = MATx[j][0]
 np.put(temp_array,0,temp)
-#result_array=np.append(result_array,temp_array)
-result_array=np.insert(result_array,k,temp_array)
-print result_array
-
-# def add_weights(lista,listb):
-#     SUM = np.array([a+b for a,b in zip(lista,listb)])
-#     SUM[0] = listb[0]
-#
-#     return (SUM)
+RESx = np.insert(RESx,k,temp_array)
+RESx_rows = RESx_rows+1
+RESx = np.reshape(RESx,(RESx_rows, RESx_cols))
+RESx = np.delete(RESx, RESx_rows-1, 0)
+print RESx.astype(int)
+SAVx = RESx.astype(int)
+np.savetxt("/Users/anhad/Desktop/order_vs_department.csv", SAVx, delimiter=",")
 
 #
 # RESx = np.empty(shape=[0, columns])
@@ -96,4 +96,3 @@ print result_array
 # RESx = np.append(RESx, [SUM], axis=0)
 # line = RESx.astype(int)
 # print line
-# np.savetxt("/Users/anhad/Desktop/order_vs_department.csv", line, delimiter=",")
